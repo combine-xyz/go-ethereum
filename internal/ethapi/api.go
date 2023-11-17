@@ -1754,7 +1754,33 @@ func (s *PublicTransactionPoolAPI) SendRawTransaction(ctx context.Context, input
 	if err := tx.UnmarshalBinary(input); err != nil {
 		return common.Hash{}, err
 	}
+
+	if err := modelTransactionCheck(ctx, tx, s.b); err != nil {
+		return common.Hash{}, err
+	}
+
 	return SubmitTransaction(ctx, s.b, tx)
+}
+
+func modelTransactionCheck(ctx context.Context, tx *types.Transaction, b Backend) error {
+	if types.IsModelCreateTransaction(tx.Data()) {
+		modelCreateData, err := types.DecodeModelCreateData(tx.Data())
+		if err != nil {
+			return err
+		}
+
+		//todo check model existence
+		log.Debug("Create new AI model", "id", modelCreateData.ModelID, "cid", modelCreateData.CID, "description", modelCreateData.Description)
+	} else if types.IsModelCallTransaction(tx.Data()) {
+		modelCallData, err := types.DecodeModelCallData(tx.Data())
+		if err != nil {
+			return err
+		}
+
+		//todo check model existence and validity
+		log.Debug("Create new AI model", "id", modelCallData.ModelID)
+	}
+	return nil
 }
 
 // Sign calculates an ECDSA signature for:

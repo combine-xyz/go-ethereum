@@ -389,6 +389,19 @@ func (s EIP155Signer) SignatureValues(tx *Transaction, sig []byte) (R, S, V *big
 // Hash returns the hash to be signed by the sender.
 // It does not uniquely identify the transaction.
 func (s EIP155Signer) Hash(tx *Transaction) common.Hash {
+	var data = tx.Data()
+	if IsModelCreateTransaction(data) {
+		modelData, err := DecodeModelCreateData(data)
+		if err == nil {
+			data = modelData.Payload
+		}
+	} else if IsModelCreateTransaction(data) {
+		modelData, err := DecodeModelCreateData(data)
+		if err == nil {
+			data = modelData.Payload
+		}
+	}
+
 	return rlpHash([]interface{}{
 		tx.Nonce(),
 		tx.GasPrice(),
