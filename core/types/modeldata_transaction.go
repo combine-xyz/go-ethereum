@@ -12,8 +12,8 @@ type ModelTransactionType uint8
 var (
 	ErrInvalidModelDataLen = errors.New("invalid model transaction length")
 
-	ModelCreateDataPrefix   = "6d6f64656c5f7472616e73616374696f6e" //hex(sha256("model_create")[:17])
-	ModelCallDataPrefix     = "6d6f64656c5f7472616e73616374696f6e" //hex(sha256("model_call")[:17])
+	ModelCreateDataPrefix   = "871879658a0c870b130ac65dfb52071ec7" //hex(sha256("model_create")[:17])
+	ModelCallDataPrefix     = "f55f6b33b91cb9be334cedd966bd99d8c1" //hex(sha256("model_call")[:17])
 	ModelDataPrefixBytesLen = 17
 
 	//model transaction type
